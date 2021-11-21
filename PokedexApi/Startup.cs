@@ -56,6 +56,7 @@ namespace PokedexApi
 
             app.UseAuthorization();
 
+            // Map Endpoints using Controllers according to .Net Core Convention
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
