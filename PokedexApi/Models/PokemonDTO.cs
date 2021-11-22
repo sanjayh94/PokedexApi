@@ -1,23 +1,23 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PokedexApi.Models
 {
     public class PokemonDTO
     {
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("description")]
+        [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonPropertyName("habitat")]
+        [JsonProperty("habitat")]
         public string Habitat { get; set; }
 
-        [JsonPropertyName("isLegendary")]
+        [JsonProperty("isLegendary")]
         public string IsLegendary { get; set; }
     }
 }
