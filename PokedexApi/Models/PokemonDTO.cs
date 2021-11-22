@@ -18,7 +18,7 @@ namespace PokedexApi.Models
         public string Habitat { get; set; }
 
         [JsonProperty("isLegendary")]
-        public string IsLegendary { get; set; }
+        public bool IsLegendary { get; set; }
     }
    
 }

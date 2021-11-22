@@ -10,7 +10,13 @@ namespace PokedexApi.Utils
     {
         public static PokemonDTO PokemonToDTO(Pokemon pokemon)
         {
-            return new PokemonDTO() { Name = pokemon.Name };
+            return new PokemonDTO() {
+                Name = pokemon.Name,
+                Habitat = pokemon.Species.Habitat.Name,
+                IsLegendary = pokemon.Species.IsLegendary,
+                // For Simplicity, finds the first english description in the list of flavour Entries
+                Description = pokemon.Species.FlavorTextEntries.Find(x => x.Language.Name.Contains("en")).FlavorText                 
+            };
         }
     }
 }
