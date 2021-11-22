@@ -20,4 +20,5 @@ namespace PokedexApi.Models
         [JsonProperty("isLegendary")]
         public string IsLegendary { get; set; }
     }
+   
 }

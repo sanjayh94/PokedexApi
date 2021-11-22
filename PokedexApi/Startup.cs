@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PokedexApi.Interfaces;
+using PokedexApi.Services;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -36,6 +38,12 @@ namespace PokedexApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PokedexApi", Version = "v1" });
             });
+
+            #region RegisterServices
+            // Registers the PokemonService as a Dependency Injection container 
+            // As we are using the service for HTTP REST API Calls, we register the service as an HTTP client
+            services.AddHttpClient<IPokemonService, PokemonService>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

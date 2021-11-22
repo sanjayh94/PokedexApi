@@ -8,6 +8,6 @@ namespace PokedexApi.Interfaces
 {
     public interface IPokemonService
     {
-        Pokemon GetPokemon(string pokemonName); 
+        Task<Pokemon> GetPokemon(string pokemonName); 
     }
 }

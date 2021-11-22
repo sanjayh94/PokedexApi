@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PokedexApi.Models
@@ -10,6 +11,9 @@ namespace PokedexApi.Models
     //    var pokemonSpecies = PokemonSpecies.FromJson(jsonString);
     public partial class PokemonSpecies
     {
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
         [JsonProperty("base_happiness")]
         public long BaseHappiness { get; set; }
 

@@ -3,6 +3,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 
 namespace PokedexApi.Models
 {
@@ -14,6 +15,9 @@ namespace PokedexApi.Models
 
     public partial class Pokemon
     {
+        // API Response Status for internal app use to determine if Service returned Not Found or 500 errors. Initialising to worst case scenario.
+        public HttpStatusCode ApiResponseStatus { get; set; } = HttpStatusCode.InternalServerError;
+
         [JsonProperty("abilities")]
         public List<Ability> Abilities { get; set; }
 
@@ -39,7 +43,7 @@ namespace PokedexApi.Models
         public long Order { get; set; }
 
         [JsonProperty("species")]
-        public Info Species { get; set; }
+        public PokemonSpecies Species { get; set; }
 
         [JsonProperty("weight")]
         public long Weight { get; set; }
