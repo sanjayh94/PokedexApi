@@ -15,7 +15,7 @@ namespace PokedexApi.Utils
                 Habitat = pokemon.Species.Habitat.Name,
                 IsLegendary = pokemon.Species.IsLegendary,
                 // For Simplicity, finds the first english description in the list of flavour Entries
-                Description = pokemon.Species.FlavorTextEntries.Find(x => x.Language.Name.Contains("en")).FlavorText                 
+                Description = pokemon.Species.FlavorTextEntries.Find(x => x.Language.Name.Contains("en")).FlavorText.Replace("\n"," ").Replace("\r", " ").Replace("\f", " ")
             };
         }
     }
