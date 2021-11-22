@@ -1,0 +1,4 @@
+{
+  //Set shadow copy to false (true by default) so XUnit does not excecute tests in a different directory than the output directory
+  "shadowCopy": false
+}
