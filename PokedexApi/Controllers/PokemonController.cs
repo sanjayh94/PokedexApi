@@ -17,12 +17,14 @@ namespace PokedexApi.Controllers
         #region DependencyInjectionVariables
         private readonly ILogger<PokemonController> _logger;
         private readonly IPokemonService _pokemonService;
+        private readonly ITranslatorService _translatorService;
         #endregion
 
-        public PokemonController(IPokemonService pokemonService, ILogger<PokemonController> logger)
+        public PokemonController(IPokemonService pokemonService, ITranslatorService translatorService, ILogger<PokemonController> logger)
         {
             //  Setting up the pokemonService using Dependency Injection. This service will call the third-party PokeApi API and retrieve Pokemon Info for the controller
-            _pokemonService = pokemonService; 
+            _pokemonService = pokemonService;
+            _translatorService = translatorService;
             _logger = logger; // Setting up the logging service using Dependency Injection
         }
 
@@ -37,10 +39,10 @@ namespace PokedexApi.Controllers
                 return NotFound();
             }
 
-            if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.OK)
+            else if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.OK)
             {
-                var pokemonDto = Utils.Utils.PokemonToDTO(pokemon);
-                return Ok(pokemonDto);
+                var pokemonDTO = Utils.Utils.PokemonToDTO(pokemon);
+                return Ok(pokemonDTO);
             }
 
             return Problem(statusCode:500);         
@@ -49,8 +51,26 @@ namespace PokedexApi.Controllers
         [HttpGet("translated/{pokemonName}")]
         public async Task<ActionResult<PokemonDTO>> GetTranslatedPokemonDescription(string pokemonName)
         {
+            var pokemonTranslated = _translatorService.GetTranslatedPokemonDescriptionWithConditions(pokemonName);
 
-            return Ok("ok");
+            if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            else if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.OK)
+            {
+                PokemonDTO pokemonDTO = new PokemonDTO()
+                {
+                    Name = pokemonTranslated.Name,
+                    Habitat = pokemonTranslated.Habitat,
+                    IsLegendary = pokemonTranslated.IsLegendary,                   
+                    Description = pokemonTranslated.Description
+                };
+                return Ok(pokemonDTO);
+            }
+
+            return Problem(statusCode: 500);
         }
     }
 }
