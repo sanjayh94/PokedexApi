@@ -12,15 +12,14 @@ namespace PokedexApi.Services
     public class PokemonService : IPokemonService
     {
         private readonly ILogger<PokemonService> _logger;
-
         private HttpClient _httpClient;
 
         public PokemonService(HttpClient httpClient, ILogger<PokemonService> logger)
         {
-            // Using Dependency Injection to initialise the HttpClient for API calls
-            _httpClient = httpClient;
             _logger = logger;
 
+            // Using Dependency Injection to initialise the HttpClient for API calls
+            _httpClient = httpClient;            
             _httpClient.BaseAddress = new Uri("https://pokeapi.co");
         }
 

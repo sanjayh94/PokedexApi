@@ -39,10 +39,11 @@ namespace PokedexApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PokedexApi", Version = "v1" });
             });
 
-            #region RegisterServices
-            // Registers the PokemonService as a Dependency Injection container 
+            #region RegisterServicesForDependencyInjection
+            // Registers the PokemonService and Translator as a Dependency Injection container 
             // As we are using the service for HTTP REST API Calls, we register the service as an HTTP client
             services.AddHttpClient<IPokemonService, PokemonService>();
+            services.AddHttpClient<ITranslatorService, TranslatorService>();
             #endregion
         }
 
