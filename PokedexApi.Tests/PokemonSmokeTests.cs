@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using PokedexApi.Tests.Models;
 using System;
@@ -38,7 +39,7 @@ namespace PokedexApi.Tests
             var response = await _client.GetAsync(url);
 
             // Assert
-            Assert.True(response.IsSuccessStatusCode);
+            response.IsSuccessStatusCode.Should().BeTrue();
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace PokedexApi.Tests
             var response = await _client.GetAsync(url);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace PokedexApi.Tests
             var response = await _client.GetAsync(url);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]

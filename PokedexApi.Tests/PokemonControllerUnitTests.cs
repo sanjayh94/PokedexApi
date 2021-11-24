@@ -8,6 +8,7 @@ using PokedexApi.Controllers;
 using PokedexApi.Interfaces;
 using PokedexApi.Models;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,29 +21,52 @@ namespace PokedexApi.Tests
         private readonly Mock<IPokemonService> pokemonServiceStub = new();
         private readonly Mock<ITranslatorService> translatorServiceStub = new();
 
-        //private Pokemon ReturnPokemonObjectWithNecessaryData()
-        //{
-        //    return new Pokemon()
-        //    {
-        //        ApiResponseStatus = System.Net.HttpStatusCode.OK,
-        //        Name = "ditto",
-        //        Species = new PokemonSpecies()
-        //        {
-        //            Habitat = new Info() { Name = "urban" },
-        //            IsLegendary = false,
-        //            FlavorTextEntries = new List<FlavorTextEntry>().Add(
-        //                new FlavorTextEntry()
-        //                {
-        //                    FlavorText = "",
-        //                    Language = new Info() { Name = "" }
-        //                })
+        private static Pokemon GetMockPokemonObjectWithNecessaryData(string name, string habitat, bool isLegendary, string description, HttpStatusCode apiResponse = HttpStatusCode.OK)
+        {
+            return new Pokemon()
+            {
+                ApiResponseStatus = apiResponse,
+                Name = name,
+                Species = new PokemonSpecies()
+                {
+                    Habitat = new Info() { Name = habitat },
+                    IsLegendary = isLegendary,
+                    FlavorTextEntries = new List<FlavorTextEntry>
+                        {
+                            new FlavorTextEntry()
+                            {
+                                FlavorText = description,
+                                Language = new Info() { Name = "en" }
+                            }
+                        }                    
 
-        //        }
-        //    };
+                }
+            };
 
-        //}
+        }
 
+        private static PokemonDTO GetMockPokemonDTOObjectWithNecessaryData(string name, string habitat, bool isLegendary, string description) 
+        {
+            return new PokemonDTO()
+            {
+                Name = name,
+                Habitat = habitat,
+                IsLegendary = isLegendary,
+                Description = description
+            };
+        }
 
+        private static PokemonTranslated GetMockPokemonTranslatedObjectWithNecessaryData(string name, string habitat, bool isLegendary, string description, HttpStatusCode apiResponse = HttpStatusCode.OK)
+        {
+            return new PokemonTranslated()
+            {
+                Name = name,
+                Habitat = habitat,
+                IsLegendary = isLegendary,
+                Description = description,
+                ApiResponseStatus = apiResponse
+            };
+        }
         #endregion
 
         [Fact]
@@ -111,20 +135,46 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeEquivalentTo(expectedResult);
         }
 
-        //[Fact]
-        //public async Task GetPokemon_WithExisitingItem_ReturnsExpectedItem()
-        //{
-        //    //Arrange
-            
+        [Fact]
+        public async Task GetPokemon_WithExisitingItem_ReturnsExpectedItem()
+        {
+            //Arrange
+            var expectedPokemon = GetMockPokemonObjectWithNecessaryData(name: "ditto", habitat: "urban", isLegendary: false,
+                description: "blah blah blah");
+            pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync(expectedPokemon);
 
-        //    pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync((Pokemon)null);
+            var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
 
-        //    var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
+            //Act
+            var actionResult = await controller.GetPokemon(It.IsAny<string>());
 
-        //    //Act
+            //Assert
+            // Initialise an OkObjectResult with the Mock PokemonDTO data as that is what we will be expecting
+            var expectedResult = new OkObjectResult(GetMockPokemonDTOObjectWithNecessaryData(name: "ditto", habitat: "urban", isLegendary: false,
+                description: "blah blah blah"));
 
-        //    //Assert
+            actionResult.Result.Should().BeEquivalentTo(expectedResult);
+        }
 
-        //}
+        [Fact]
+        public async Task GetTranslatedPokemon_WithExisitingItem_ReturnsExpectedItem()
+        {
+            //Arrange
+            var expectedPokemonTranslated = GetMockPokemonTranslatedObjectWithNecessaryData(name: "ditto", habitat: "urban", isLegendary: false,
+                description: "blah blah blah");
+            translatorServiceStub.Setup(pokemon => pokemon.GetTranslatedPokemonDescriptionWithConditions(It.IsAny<string>())).Returns(expectedPokemonTranslated);
+
+            var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
+
+            //Act
+            var actionResult = await controller.GetTranslatedPokemonDescription(It.IsAny<string>());
+
+            //Assert
+            // Initialise an OkObjectResult with the Mock PokemonDTO data as that is what we will be expecting
+            var expectedResult = new OkObjectResult(GetMockPokemonDTOObjectWithNecessaryData(name: "ditto", habitat: "urban", isLegendary: false,
+                description: "blah blah blah"));
+
+            actionResult.Result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }
