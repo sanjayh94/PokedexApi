@@ -32,45 +32,61 @@ namespace PokedexApi.Controllers
         [HttpGet("{pokemonName}")]
         public async Task<ActionResult<PokemonDTO>> GetPokemon(string pokemonName)
         {
-            var pokemon = await _pokemonService.GetPokemon(pokemonName);
-
-            if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
+            try
             {
-                return NotFound();
+                var pokemon = await _pokemonService.GetPokemon(pokemonName);
+
+                if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+
+                else if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.OK)
+                {
+                    var pokemonDTO = Utils.Utils.PokemonToDTO(pokemon);
+                    return Ok(pokemonDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[GetPokemon Controller] Exception occured in Controller: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            else if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.OK)
-            {
-                var pokemonDTO = Utils.Utils.PokemonToDTO(pokemon);
-                return Ok(pokemonDTO);
-            }
-
-            return Problem(statusCode:500);         
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpGet("translated/{pokemonName}")]
         public async Task<ActionResult<PokemonDTO>> GetTranslatedPokemonDescription(string pokemonName)
         {
-            var pokemonTranslated = _translatorService.GetTranslatedPokemonDescriptionWithConditions(pokemonName);
-
-            if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
+            try
             {
-                return NotFound();
-            }
+                var pokemonTranslated = _translatorService.GetTranslatedPokemonDescriptionWithConditions(pokemonName);
 
-            else if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.OK)
-            {
-                PokemonDTO pokemonDTO = new PokemonDTO()
+                if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
                 {
-                    Name = pokemonTranslated.Name,
-                    Habitat = pokemonTranslated.Habitat,
-                    IsLegendary = pokemonTranslated.IsLegendary,                   
-                    Description = pokemonTranslated.Description
-                };
-                return Ok(pokemonDTO);
+                    return NotFound();
+                }
+
+                else if (pokemonTranslated.ApiResponseStatus == System.Net.HttpStatusCode.OK)
+                {
+                    PokemonDTO pokemonDTO = new PokemonDTO()
+                    {
+                        Name = pokemonTranslated.Name,
+                        Habitat = pokemonTranslated.Habitat,
+                        IsLegendary = pokemonTranslated.IsLegendary,
+                        Description = pokemonTranslated.Description
+                    };
+                    return Ok(pokemonDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[GetTranslatedPokemonDescription Controller] Exception occured in Controller: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Problem(statusCode: 500);
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }
