@@ -58,7 +58,7 @@ namespace PokedexApi.Tests
             var actionResult = await controller.GetPokemon(It.IsAny<string>());
 
             // Assert
-            Assert.IsType<NotFoundResult>(actionResult.Result);
+            actionResult.Result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace PokedexApi.Tests
             var actionResult = await controller.GetTranslatedPokemonDescription(It.IsAny<string>());
 
             // Assert
-            Assert.IsType<NotFoundResult>(actionResult.Result);
+            actionResult.Result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
@@ -111,20 +111,20 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeEquivalentTo(expectedResult);
         }
 
-        [Fact]
-        public async Task GetPokemon_WithExisitingItem_ReturnsExpectedItem()
-        {
-            //Arrange
+        //[Fact]
+        //public async Task GetPokemon_WithExisitingItem_ReturnsExpectedItem()
+        //{
+        //    //Arrange
             
 
-            pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync((Pokemon)null);
+        //    pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync((Pokemon)null);
 
-            var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
+        //    var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
 
-            //Act
+        //    //Act
 
-            //Assert
+        //    //Assert
 
-        }
+        //}
     }
 }
