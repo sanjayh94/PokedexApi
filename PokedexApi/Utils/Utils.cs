@@ -4,6 +4,13 @@ namespace PokedexApi.Utils
 {
     public class Utils
     {
+        /// <summary>
+        /// Static Util Class to convert an object of type Pokemon to PokemonDTO class. 
+        /// This class is normally used by the controller to Select a subset of properties into a DTO (Data Transfer Object) as we would only expose a subset of the original Model.
+        /// It is considered Best practice to use a DTO object for sending response payloads
+        /// </summary>
+        /// <param name="pokemon">Object of type Pokemon</param>
+        /// <returns>PokemonDTO object with relevant properties from supplied Pokemon object</returns>
         public static PokemonDTO PokemonToDTO(Pokemon pokemon)
         {
             return new PokemonDTO() {

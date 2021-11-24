@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PokedexApi.Controllers
 {
+    /// <summary>
+    /// Controller for Default ('/') routes. Currently just set up for healthchecks. Not necessary at this point to be honest.
+    /// </summary>
     [Route("/")]
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        private readonly ILogger<DefaultController> _logger;
+        #region PrivateVariables
+        private readonly ILogger<DefaultController> _logger; 
+        #endregion
+
 
         public DefaultController(ILogger<DefaultController> logger)
         {
+            // Setting up logger using Dependency Injection
             _logger = logger;
         }
 
