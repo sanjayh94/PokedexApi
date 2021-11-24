@@ -2,12 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using PokedexApi.Tests.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -81,11 +77,8 @@ namespace PokedexApi.Tests
             var response = await _client.GetAsync(url);
             var model = JsonConvert.DeserializeObject<ExpectedPokemonResponse>(response.Content.ReadAsStringAsync().Result);
 
-            // Assert
-            Assert.NotNull(model?.Name);
-            Assert.NotNull(model?.IsLegendary);
-            Assert.NotNull(model?.Description);
-            Assert.NotNull(model?.Habitat);
+            // Assert            
+            model.Should().BeOfType<ExpectedPokemonResponse>();
         }
 
         //[Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
@@ -101,10 +94,7 @@ namespace PokedexApi.Tests
             var model = JsonConvert.DeserializeObject<ExpectedPokemonResponse>(response.Content.ReadAsStringAsync().Result);
 
             // Assert
-            Assert.NotNull(model?.Name);
-            Assert.NotNull(model?.IsLegendary);
-            Assert.NotNull(model?.Description);
-            Assert.NotNull(model?.Habitat);
+            model.Should().BeOfType<ExpectedPokemonResponse>();
         }
 
         [Fact]
