@@ -1,5 +1,5 @@
 # PokedexApi
-A Pokedex Web API application built in the .NET 5 Web API framework that retrieves a Pokemon's basic information using public APIs.
+A Pokedex Web API application built using the .NET 5 Web API framework that retrieves a Pokemon's basic information using public APIs.
 ## How to Run
 I personally used Visual Studio to develop, test and run the project, but there are multiple ways to run this project. The different methods are listed below.
 
@@ -130,6 +130,45 @@ The `Startup.cs` file is the starting point of the application when the Applicat
 ![Swagger doc](https://user-images.githubusercontent.com/94787187/143486385-9db57084-123d-4279-9900-c107d74f733d.png)
 
 The tests are located in a seperate (but linked) project called `PokedexApi.Tests`. The tests contain Unit tests and Smoke tests. The Tests project uses the XUnit Framework for testing, Moq library for Mocking and the FluentAssertions for better assertions.
+
+The `Controllers/PokemonController.cs` file is where the routes are handled. The Controller is responsible for handling user requests only. The heavy lifting is passed onto Services such as `PokemonService.cs` and `TranslatorService.cs`. Notice how the Interfaces for the services `IPokemonService` and `ITranslationSerice` are used in the Constructor instead of the actual implementation class using Dependency Injection to avoid being dependent on the implementation class.
+
+```C#
+// File: PokedexApi/Controllers/PokemonController
+
+    [Route("pokemon")]
+    [ApiController]
+    public class PokemonController : ControllerBase
+    {
+        #region DependencyInjectionVariables
+        private readonly ILogger<PokemonController> _logger;
+        private readonly IPokemonService _pokemonService;
+        private readonly ITranslatorService _translatorService;
+        #endregion
+
+        public PokemonController(IPokemonService pokemonService, ITranslatorService translatorService, ILogger<PokemonController> logger)
+        {
+            //  Setting up the pokemonService using Dependency Injection. This service will call the third-party PokeApi API and retrieve Pokemon Info for the controller
+            _pokemonService = pokemonService;
+            _translatorService = translatorService;
+            _logger = logger; // Setting up the logging service using Dependency Injection
+        }
+
+        
+        [HttpGet("{pokemonName}")]
+        public async Task<ActionResult<PokemonDTO>> GetPokemon(string pokemonName)
+        {
+            try
+            {
+                var pokemon = await _pokemonService.GetPokemon(pokemonName);
+
+                if (pokemon.ApiResponseStatus == System.Net.HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+                
+                // rest of the code omitted
+```
 
 
 ## Approach for Production
