@@ -93,14 +93,14 @@ Note: Smoke tests make actual API calls. The `/pokemon/translated` is rate-limit
 
 ## Design Decisions and Code Structure
 
-I have used the .NET 5.0 (a.k.a. [ASP.NET Core 5.0](https://dotnet.microsoft.com/apps/aspnet/apis)) Web API framework in C# to write this application. .NET 5.0 is an open source and cross platform .NET implementation to build websites and APIs. I preferred to build this task in .NET as it encourages good coding practices such as Seperation of Concerns (or Single Responsibility Principle) through the MVC Design pattern, and Dependency Inversion principle through [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1). Also, C# being an OOP language, it is strictly typed, thus easier to read. The Structure of .NET can be easier to read if the code follows the best practices and conventions. Becuase of Dependency Injection, Classes are dependent on abstractions (Interfaces), rather than implementations which make the codebase very modular and easier to unit test.
+I have used the .NET 5.0 (a.k.a. [ASP.NET Core 5.0](https://dotnet.microsoft.com/apps/aspnet/apis)) Web API framework in C# to write this application. .NET 5.0 is an open source and cross platform .NET implementation to build websites and APIs. I preferred to build this task in .NET as it encourages good coding practices such as Seperation of Concerns (or Single Responsibility Principle) through the MVC Design pattern, and Dependency Inversion principle through [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1). Also, C# being an OOP language, it is strictly typed, thus easier to read. The Structure of .NET can be easier to read if the code follows the best practices and conventions. Because of Dependency Injection, Classes are dependent on abstractions (Interfaces), rather than implementations which make the codebase very modular and easier to unit test.
 
 The following image (taken from [microsoft's documentation page](https://docs.microsoft.com/en-gb/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0)) shows the architecture of the MVC design pattern of Web API application
 
 ![Web API architecture](https://user-images.githubusercontent.com/94787187/143485336-ccb99214-29e8-408b-8e32-4006ab4a8a4b.png)
 
 
-.NET Core Web APIs are also easily configurable using middlewares such as adding request logging or adding retry logic to handle transient API failures.
+.NET Core Web APIs are also easily configurable using middleware pipelines such as adding request logging or adding retry logic to handle transient API failures.
 
 ![Middleware](https://user-images.githubusercontent.com/94787187/143485645-5c069a55-7d30-4432-ae74-9cf391d9340e.png)
 
