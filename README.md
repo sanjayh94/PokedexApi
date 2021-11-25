@@ -58,6 +58,27 @@ Run the project using any of the methods above, and then use your preferred API 
   + _Note: Be mindful of making multiple requests to this endpoint as the public translation API is rate-limited to 5 calls per hour. However the app is configured to return a standard description if that happens._
 
 ## Running Tests
-Visual studio and dotnet cli
+![Running Tests in Visual Studio](https://user-images.githubusercontent.com/94787187/143479724-69f4d5f5-9902-4aa0-8d5e-7f8b3ecd7aa9.png)
+
+The project consists of a number of Unit Tests and Smoke Tests. Unit tests test methods in isolation of dependencies and Smoke Tests are end-to-end tests that involve making API calls to the project and the third party APIs as well. Smoke tests are useful for a final sanity check before deploying to Production.
+
+Note: Smoke tests make actual API calls. The `/pokemon/translated` is rate-limited by the external API to 5 calls per hour, so there are chances it may fail. Therefore these tests are skipped. To un-skip them, the `[Fact(Skip)]` attribute code can be replaced with `[Fact]`.
+
+```C#
+// File: /PokemonApi.Tests/PokemonSmokeTests.cs
+
+ [Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
+  //[Fact]
+  public async Task Get_PokemonTranslated_Cave_ReturnsExpectedJsonContent_YodaTranslation()
+  {
+      // Arrange
+      string pokemonName = "onix";
+      string url = $"/pokemon/translated/{pokemonName}";
+      
+  // rest of the code ommitted
+```
+
+### Using Visual Studio (or VSCode)
+### Using dotnet CLI
 ## Design Decisions and Code Structure
 ## Approach for Production
