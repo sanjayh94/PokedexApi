@@ -184,17 +184,72 @@ Input Validation or Input Sanitisation can be important in API applications from
 Performance monitoring and Load testing can be critical to API apps. Monitoring can help detect failures or when an application is under load. Load testing can help simulate the load and assess the resiliency of the app. Performance monitoring can be done through platforms such as Prometheus, New Relic, Splunk, etc.
 
 #### Logging
+The App is configured to use the [Serilog](https://serilog.net/) library for structured event logging. The benefit of using this library is that logging only needs to be set up once and then the logs can be provided to any of the configurable providers such as [Splunk, Prometheus, Console, File, GrayLog, S3 and even Email](https://github.com/serilog/serilog/wiki/Provided-Sinks)! At the moment the App is configured to write to the console, but ideally would like to send it to a log consuming platform such as Splunk
+
+```C#
+// File: Program.cs
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            // Configure Serilog Logging.
+            // Serilog provides structured API event logs that can be easily extended to any supported log consuming platforms such as Splunk, Prometheus, Console, File, GrayLog, S3 and even Email!
+            // https://github.com/serilog/serilog/wiki/Provided-Sinks
+            // Setting up logging to Console for now
+
+            #region SerilogConfiguration
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning) // Set logging level to warning and above from ASP.NET Core components as it can get chatty
+            .Enrich.FromLogContext()
+            .WriteTo.Console() // Writing logs to Console
+            .CreateLogger();
+            
+            // rest of the code omitted
+```
 
 #### Caching
+Cache responses locally (or even a Redis Cache) to avoid making multiple calls to the external APIs for the same GET calls.
 
 #### Configuration/ Secret Management
+An app mostly has configuration files and/or secrets. Storing and fetching them from a secure vault (Such as Hashicorp vault) to avoid storing them in repos
 
 #### API Gateway
-
-#### CI/CD Pipelines & Deployment Automation
+The app can be placed behind an API gateway to manage and secure APIs including loadbalancing, authentication and SSL.
 
 #### Resiliency (Retry Logic)
+The app is configured to use a retry and transient fault handling library called [Polly](https://github.com/App-vNext/Polly). The Polly libraries automatically retries external HTTP calls configured according to policies, if they are experiencing transient failure. Developers can use the library to configure policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback. At the moment, the app is configured with a simple retry policy but can use more robust policies in production if needed.
+
+```C#
+// File: Startup.cs
+
+         public void ConfigureServices(IServiceCollection services)
+        {
+            // Code omitted here ....
+            
+            #region RegisterServicesForDependencyInjection
+            // Registers the PokemonService and Translator as a Dependency Injection container 
+            // As we are using the service for HTTP REST API Calls, we register the service as an HTTP client
+
+            services.AddHttpClient<IPokemonService, PokemonService>()
+                .AddTransientHttpErrorPolicy(p =>
+                    p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(600)));
+
+            services.AddHttpClient<ITranslatorService, TranslatorService>()
+                .AddTransientHttpErrorPolicy(p =>
+                    p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(600)));
+
+            // Additionally, the above services are configured with a third party library called Polly which handles transient fault handling for API calls
+            // It allows developers to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback in a fluent and thread-safe manner.
+
+            // In the preceding code, a WaitAndRetryAsync policy is defined. Failed requests are retried up to three times with a delay of 600 ms between attempts.
+            #endregion
+        }
+```
 
 #### More Testing
 More testing Coverage :)
+
+#### CI/CD Pipelines & Deployment Automation
+Deployment of the app can be handled through CI/CD pipelines and automation tools. Unit tests and Smoke tests can be used as gates before deployment. All of the tools mentioned above can be integrated using CI/CD.
 
