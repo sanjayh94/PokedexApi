@@ -175,10 +175,13 @@ The `Controllers/PokemonController.cs` file is where the routes are handled. The
 Further are points where I would do things differently for production
 
 #### Deployment & Hosting
+App would be preferably deployed in container(s) on a Kubernetes platform. Can be running on multiple pods and load-balanced. It would be easier to have an distributed architecture since the App doesn't have State or a Persistence layer at the moment. The App is designed to be fault tolerant i.e. when a pod dies, it would be easily brought back online when redeployed, or when the app needs to be scaled. Can also do Canary deployments.
 
 #### Input Validation
+Input Validation or Input Sanitisation can be important in API applications from a Security point of view. Especially when POST routes are implemented. This can be configured using a library such as [Fluent Validation](https://fluentvalidation.net/)
 
 #### Performance Monitoring
+Performance monitoring and Load testing can be critical to API apps. Monitoring can help detect failures or when an application is under load. Load testing can help simulate the load and assess the resiliency of the app. Performance monitoring can be done through platforms such as Prometheus, New Relic, Splunk, etc.
 
 #### Logging
 
@@ -193,4 +196,5 @@ Further are points where I would do things differently for production
 #### Resiliency (Retry Logic)
 
 #### More Testing
+More testing Coverage :)
 
