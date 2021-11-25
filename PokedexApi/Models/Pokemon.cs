@@ -13,6 +13,9 @@ namespace PokedexApi.Models
     //
     //    var pokemon = Pokemon.FromJson(jsonString);
 
+    /// <summary>
+    /// Model Data class for Pokemon related Data
+    /// </summary>
     public partial class Pokemon
     {
         // API Response Status for internal app use to determine if Service returned Not Found or 500 errors. Initialising to worst case scenario.
@@ -70,11 +73,17 @@ namespace PokedexApi.Models
         public Uri Url { get; set; }
     }
 
+    /// <summary>
+    /// Helper method to Deserialize json string to the .Net Pokemon model class
+    /// </summary>
     public partial class Pokemon
     {
         public static Pokemon FromJson(string json) => JsonConvert.DeserializeObject<Pokemon>(json, PokedexApi.Models.Converter.Settings);
     }
 
+    /// <summary>
+    /// Helper method to Serialize this class to json string
+    /// </summary>
     public static class Serialize
     {
         public static string ToJson(this Pokemon self) => JsonConvert.SerializeObject(self, PokedexApi.Models.Converter.Settings);

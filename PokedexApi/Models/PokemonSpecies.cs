@@ -9,6 +9,10 @@ namespace PokedexApi.Models
     //    using PokedexApi.Models;
     //
     //    var pokemonSpecies = PokemonSpecies.FromJson(jsonString);
+
+    /// <summary>
+    /// Subset of Pokemon Data Model Class for Species Metadata when a seperate API call is made
+    /// </summary>
     public partial class PokemonSpecies
     {
         [JsonProperty("url")]
@@ -93,6 +97,9 @@ namespace PokedexApi.Models
         public Info Pokemon { get; set; }
     }
 
+    /// <summary>
+    /// Helper method to Deserialize json string to the .Net PokemonSpecies model class
+    /// </summary>
     public partial class PokemonSpecies
     {
         public static PokemonSpecies FromJson(string json) => JsonConvert.DeserializeObject<PokemonSpecies>(json, PokedexApi.Models.Converter.Settings);

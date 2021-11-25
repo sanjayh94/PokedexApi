@@ -15,7 +15,6 @@ namespace PokedexApi.Controllers
         private readonly ILogger<DefaultController> _logger; 
         #endregion
 
-
         public DefaultController(ILogger<DefaultController> logger)
         {
             // Setting up logger using Dependency Injection

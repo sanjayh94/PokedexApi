@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using PokedexApi.Controllers;
 using PokedexApi.Interfaces;
 using PokedexApi.Models;
@@ -14,12 +13,15 @@ using Xunit;
 
 namespace PokedexApi.Tests
 {
+    /// <summary>
+    /// Class with methods to Unit test PokemonController. Uses XUnit for Unit testing, Moq library for Mocks and FluentAssertions for assertions.
+    /// </summary>
     public class PokemonControllerUnitTests
     {
         #region PrivateVariables
-        private readonly Mock<ILogger<PokemonController>> loggerStub = new();
-        private readonly Mock<IPokemonService> pokemonServiceStub = new();
-        private readonly Mock<ITranslatorService> translatorServiceStub = new();
+        private readonly Mock<ILogger<PokemonController>> loggerStub = new(); // Mock Stub of logger dependency
+        private readonly Mock<IPokemonService> pokemonServiceStub = new(); // Mock Stub of pokemonService dependency
+        private readonly Mock<ITranslatorService> translatorServiceStub = new(); // Mock Stub of translatorService dependency
 
         private static Pokemon GetMockPokemonObjectWithNecessaryData(string name, string habitat, bool isLegendary, string description, HttpStatusCode apiResponse = HttpStatusCode.OK)
         {
@@ -69,22 +71,29 @@ namespace PokedexApi.Tests
         }
         #endregion
 
+        /// <summary>
+        /// Unit test to Get Pokemon method with non existing Pokemon. Should return Not Found
+        /// </summary>
         [Fact]
         public async Task GetPokemon_NonExistingPokemon_Returns_Not_Found()
         {
             // Arrange           
-            var pokemonMock = new Pokemon() { ApiResponseStatus= System.Net.HttpStatusCode.NotFound};
-            pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync(pokemonMock);
- 
-            var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object);
+            var pokemonMock = new Pokemon() { ApiResponseStatus= System.Net.HttpStatusCode.NotFound}; //Mock of fake Pokemon class
+            // Tell pokemonServiceStub to make a call to GetPokemon method of pokemonService using any string as input parameter (since it doesn't matter) and returns the fake mock of Pokemon Class
+            pokemonServiceStub.Setup(pokemon => pokemon.GetPokemon(It.IsAny<string>())).ReturnsAsync(pokemonMock); 
+
+            var controller = new PokemonController(pokemonServiceStub.Object, translatorServiceStub.Object, loggerStub.Object); // Pass Dependency Injection variables when initialising Controller
 
             // Act
-            var actionResult = await controller.GetPokemon(It.IsAny<string>());
+            var actionResult = await controller.GetPokemon(It.IsAny<string>()); // Make a call to GetPokemon method of the controller using any string (Input doesn't matter)
 
             // Assert
-            actionResult.Result.Should().BeOfType<NotFoundResult>();
+            actionResult.Result.Should().BeOfType<NotFoundResult>(); //Assert the response should be of type NotFoundResult
         }
 
+        /// <summary>
+        /// Unit test to Get Pokemon Translated method with non existing Pokemon. Should return Not Found
+        /// </summary>
         [Fact]
         public async Task GetTranslatedPokemon_NonExistingPokemon_Returns_Not_Found()
         {
@@ -101,6 +110,10 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeOfType<NotFoundResult>();
         }
 
+        /// <summary>
+        /// Unit test to Get Pokemon method with null return from PokemonService. Should return 500 InternalServerError
+        /// Used to test graceful failure
+        /// </summary>
         [Fact]
         public async Task GetPokemon_NullObject_Returns_500()
         {
@@ -118,6 +131,10 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeEquivalentTo(expectedResult);
         }
 
+        /// <summary>
+        /// Unit test to Get Pokemon Translated method with null return from PokemonService. Should return 500 InternalServerError
+        /// Used to test graceful failure
+        /// </summary>
         [Fact]
         public async Task GetTranslatedPokemon_NullObject_Returns_500()
         {
@@ -135,6 +152,9 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeEquivalentTo(expectedResult);
         }
 
+        /// <summary>
+        /// Unit test to Get Pokemon method with an existing pokemon. Should return expected Pokemon result
+        /// </summary>
         [Fact]
         public async Task GetPokemon_WithExisitingItem_ReturnsExpectedItem()
         {
@@ -156,6 +176,9 @@ namespace PokedexApi.Tests
             actionResult.Result.Should().BeEquivalentTo(expectedResult);
         }
 
+        /// <summary>
+        /// Unit test to Get Pokemon Translated method with an existing pokemon. Should return expected Pokemon result
+        /// </summary>
         [Fact]
         public async Task GetTranslatedPokemon_WithExisitingItem_ReturnsExpectedItem()
         {

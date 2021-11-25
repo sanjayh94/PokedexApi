@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PokedexApi.Models
 {
+    /// <summary>
+    /// Model Data class for Data Transfer Object. This is the class used to send final data to User.
+    /// </summary>
     public class PokemonDTO
     {
         [JsonProperty("name")]

@@ -2,6 +2,9 @@
 
 namespace PokedexApi.Tests.Models
 {
+    /// <summary>
+    /// Model class to use as a comparison for expected Pokemon response from the API
+    /// </summary>
     class ExpectedPokemonResponse
     {
         [JsonProperty("name")]

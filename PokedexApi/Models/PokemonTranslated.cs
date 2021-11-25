@@ -1,15 +1,14 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace PokedexApi.Models
 {
+    /// <summary>
+    /// Model Class for sending response from the translatorService back to controller. 
+    /// </summary>
     public class PokemonTranslated
     {
-        // API Response Status for internal app use to determine if Service returned Not Found or 500 errors. Initialising to worst case scenario.
+        // API Response Status for internal app use to determine if external API returned Not Found or 500 errors. Initialising to worst case scenario.
         public HttpStatusCode ApiResponseStatus { get; set; } = HttpStatusCode.InternalServerError;
 
         [JsonProperty("name")]

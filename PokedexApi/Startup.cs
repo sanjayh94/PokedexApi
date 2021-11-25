@@ -1,19 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PokedexApi.Interfaces;
 using PokedexApi.Services;
 using Polly;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PokedexApi
 {
@@ -57,6 +52,7 @@ namespace PokedexApi
             // It allows developers to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback in a fluent and thread-safe manner.
 
             // In the preceding code, a WaitAndRetryAsync policy is defined. Failed requests are retried up to three times with a delay of 600 ms between attempts.
+            // Handles errors such as HttpRequestException, HTTP 5xx, HTTP 408
             #endregion
         }
 
