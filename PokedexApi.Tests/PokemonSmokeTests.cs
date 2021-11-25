@@ -81,8 +81,8 @@ namespace PokedexApi.Tests
             model.Should().BeOfType<ExpectedPokemonResponse>();
         }
 
-        //[Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
-        [Fact]
+        [Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
+        //[Fact]
         public async Task Get_PokemonTranslated_ReturnsExpectedJsonFormat()
         {
             // Arrange
@@ -121,8 +121,8 @@ namespace PokedexApi.Tests
             Assert.Equal(expectedPokemonResponse, result);
         }
 
-        //[Fact (Skip ="Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
-        [Fact]
+        [Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
+        //[Fact]
         public async Task Get_PokemonTranslated_Cave_ReturnsExpectedJsonContent_YodaTranslation()
         {
             // Arrange
@@ -145,8 +145,8 @@ namespace PokedexApi.Tests
             Assert.Equal(expectedPokemonResponse, result);
         }
 
-        //[Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
-        [Fact]
+        [Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
+        //[Fact]
         public async Task Get_PokemonTranslated_Legendary_ReturnsExpectedJsonContent_YodaTranslation()
         {
             // Arrange
@@ -169,8 +169,8 @@ namespace PokedexApi.Tests
             Assert.Equal(expectedPokemonResponse, result);
         }
 
-        //[Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
-        [Fact]
+        [Fact(Skip = "Skipping Translated Endpoint as Public Endpoint is ratelimited to 5 calls per hour")]
+        //[Fact]
         public async Task Get_PokemonTranslated_ReturnsExpectedJsonContent_ShakespeareTranslation()
         {
             // Arrange
